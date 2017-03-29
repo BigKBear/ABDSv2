@@ -27,10 +27,12 @@ import android.widget.Toast;
 import com.kosalgeek.android.photoutil.GalleryPhoto;
 import com.kosalgeek.android.photoutil.ImageLoader;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -160,7 +162,90 @@ public class FileListActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.btnEncryptDecrypt:
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(FileListActivity.this);
+                createDirIfNotExists(Environment.getExternalStorageDirectory().toString());
+                File folder = new File(Environment.getExternalStorageDirectory() +
+                        File.separator + "TollCulator");
+                boolean success = true;
+                if (!folder.exists()) {
+                    success = folder.mkdir();
+                }
+                if (success) {
+                    // Do something on success
+                    Toast.makeText(getApplicationContext(),
+                            "Do something on success", Toast.LENGTH_SHORT
+                    ).show();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            "Do something else on failure", Toast.LENGTH_SHORT
+                    ).show();
+                    // Do something else on failure
+                }
+
+               /* String state0 = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state0)) {
+                    Log.d("Test", "sdcard mounted and writable");
+                    String newFolder = "/ABDS";
+                    String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+                    Toast.makeText(getApplicationContext(),
+                            extStorageDirectory, Toast.LENGTH_SHORT
+                    ).show();
+                    File myNewFolder = new File(extStorageDirectory + newFolder);
+                    myNewFolder.mkdir();
+                }
+                else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state0)) {
+                    Log.d("Test", "sdcard mounted readonly");
+                }
+                else {
+                    Log.d("Test", "sdcard state: " + state0);
+                }
+
+
+                try {
+                    File root = Environment.getExternalStorageDirectory();
+                    if (root.canWrite()){
+                        System.out.println("Can write to.");
+                        File def_file = new File(root, "default.txt");
+                        FileWriter fw = new FileWriter(def_file);
+                        BufferedWriter out = new BufferedWriter(fw);
+                        String defbuf = "default";
+                        out.write(defbuf);
+                        out.flush();
+                        out.close();
+                    }
+                    else
+                        System.out.println("Can't write.");
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String state = Environment.getExternalStorageState();
+                if (Environment.MEDIA_MOUNTED.equals(state)) {
+                    Log.d("StatusActivity", "sdcard mounted and writable");
+                }
+                else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+                    Log.d("StatusActivity", "sdcard mounted readonly");
+                }
+                else {
+                    Log.d("StatusActivity", "sdcard state: " + state);
+                }
+
+                String newFolder = "/ABDS";
+                String extStorageDirectory = Environment.getExternalStorageDirectory().toString();
+                Toast.makeText(getApplicationContext(),
+                        extStorageDirectory, Toast.LENGTH_SHORT
+                ).show();
+                File myNewFolder = new File(extStorageDirectory + newFolder);
+                myNewFolder.mkdir();
+
+                Log.d("FileListActivity", "Can write: " + Environment.getExternalStorageDirectory().canWrite());
+                boolean result = myNewFolder.mkdirs();
+                Log.d("MyActivity", "mkdirs: " + result);*/
+
+
+
+
+
+                /*AlertDialog.Builder alertDialog = new AlertDialog.Builder(FileListActivity.this);
                 alertDialog.setTitle("PASSWORD");
                 alertDialog.setMessage("Enter Password");
 
@@ -201,10 +286,10 @@ public class FileListActivity extends AppCompatActivity implements View.OnClickL
                                     Toast.makeText(getApplicationContext(),
                                             "Wrong Password!", Toast.LENGTH_SHORT).show();
                                 }
-                               /* }else {
+                               *//* }else {
                                     Toast.makeText(getApplicationContext(),
                                             "No Password Entered!", Toast.LENGTH_SHORT).show();
-                                }*/
+                                }*//*
                             }
                         });
                 alertDialog.setNegativeButton("Cancel",
@@ -213,7 +298,7 @@ public class FileListActivity extends AppCompatActivity implements View.OnClickL
                                 dialog.cancel();
                             }
                         });
-                alertDialog.show();
+                alertDialog.show();*/
 
 
                /* if (prefs.getString("password", "").matches(LoginPassword)) {
@@ -241,6 +326,19 @@ public class FileListActivity extends AppCompatActivity implements View.OnClickL
                 finish();
                 break;
         }
+    }
+
+    public static boolean createDirIfNotExists(String path) {
+        boolean ret = true;
+
+        File file = new File(Environment.getExternalStorageDirectory(), path);
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e("TravellerLog :: ", "Problem creating Image folder");
+                ret = false;
+            }
+        }
+        return ret;
     }
 
     private boolean isExternalStorageAvailable() {
